@@ -1,4 +1,4 @@
-import { ArrowUpRight, Headset, House, PackageCheck, Plane, Ship, Truck, Warehouse, FileText, Handshake, MessageSquare } from "lucide-react";
+import { ArrowRight, Headset, House, PackageCheck, Plane, Ship, Truck, Warehouse, FileText, Handshake, MessageSquare } from "lucide-react";
 import { story } from "@/content/home";
 
 /** Role nodes positioned in percentages of the illustration box. */
@@ -98,7 +98,7 @@ export function CompanyStory() {
           <div className="mt-9 flex flex-col gap-3 xs:flex-row">
             {story.actions.map((a, i) => (
               <a key={a.href} href={a.href} className={`btn ${i === 0 ? "btn-blue" : "btn-secondary"}`}>
-                {a.label} <ArrowUpRight aria-hidden className="size-4" />
+                {a.label} <ArrowRight aria-hidden className="size-4" />
               </a>
             ))}
           </div>

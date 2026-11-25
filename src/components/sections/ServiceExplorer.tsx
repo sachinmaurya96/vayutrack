@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, Check, Plane, Ship, Truck } from "lucide-react";
+import { ArrowRight, Check, Plane, Ship, Truck } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { services, serviceByMode, type ServiceMode } from "@/content/services";
+import { links } from "@/content/site";
 import { SceneControls } from "@/components/scene/SceneControls";
 import { SceneSlot } from "@/components/scene/SceneSlot";
 import { useScene } from "@/components/scene/store";
@@ -17,6 +18,26 @@ export function ServiceExplorer() {
   const reduce = useReducedMotion();
   const active = serviceByMode[mode];
   const Icon = icons[mode];
+
+  // Links such as #tab-air (header, footer, scene panel) open the matching tab.
+  useEffect(() => {
+    const select = (hash: string) => {
+      const match = /^#tab-(express|air|ocean)$/.exec(hash);
+      if (match) setMode(match[1] as ServiceMode);
+      return !!match;
+    };
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as Element | null)?.closest?.("a[href^='#tab-']");
+      if (!a || !select(a.getAttribute("href") ?? "")) return;
+      e.preventDefault();
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      requestAnimationFrame(() => document.getElementById("services")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }));
+      history.replaceState(null, "", "#services");
+    };
+    if (select(location.hash)) document.getElementById("services")?.scrollIntoView();
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [setMode]);
 
   function onKeyDown(e: React.KeyboardEvent, index: number) {
     const last = services.length - 1;
@@ -108,11 +129,11 @@ export function ServiceExplorer() {
                     <span className="font-bold text-navy">Best suited for:</span> {active.bestFor}
                   </p>
                   <div className="mt-6 flex flex-col gap-3 xs:flex-row xs:flex-wrap">
-                    <a href={active.href} className="btn btn-blue">
-                      Explore service<span className="sr-only">: {active.name}</span> <ArrowUpRight aria-hidden className="size-4" />
+                    <a href={active.enquiryHref} className="btn btn-blue">
+                      Discuss this shipment<span className="sr-only"> ({active.name})</span> <ArrowRight aria-hidden className="size-4" />
                     </a>
-                    <a href={active.enquiryHref} className="btn btn-secondary">
-                      Discuss this shipment<span className="sr-only"> ({active.name})</span>
+                    <a href={links.howItWorks} className="btn btn-secondary">
+                      See how it works
                     </a>
                   </div>
                 </motion.div>

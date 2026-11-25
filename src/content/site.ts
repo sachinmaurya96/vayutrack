@@ -1,24 +1,24 @@
 /**
  * Site-wide facts and destinations.
  *
- * Every URL below was confirmed to respond on the current public site
- * (25 Nov 2026). Swap a value here to point the whole page at a new route.
+ * Every destination stays on this page: links point to sections by id, and
+ * the only outbound actions are the company's phone and email.
  */
 
 export const links = {
-  home: "/",
-  about: "https://vayutrack.com/about",
-  express: "https://vayutrack.com/services/express-freight",
-  air: "https://vayutrack.com/services/air-freight",
-  ocean: "https://vayutrack.com/services/ocean-freight",
-  booking: "https://vayutrack.com/ship-with-vayutrack",
-  business: "https://vayutrack.com/business-enquiry",
-  partner: "https://vayutrack.com/become-a-partner",
-  tracking: "https://vayutrack.com/track",
-  contact: "https://vayutrack.com/contact",
-  locations: "https://vayutrack.com/locate-us",
-  careers: "https://vayutrack.com/apply-jobs",
-  culture: "https://vayutrack.com/life",
+  top: "#top",
+  track: "#track",
+  services: "#services",
+  /** Service anchors also select the matching tab in the service explorer. */
+  express: "#tab-express",
+  air: "#tab-air",
+  ocean: "#tab-ocean",
+  howItWorks: "#how-it-works",
+  about: "#about",
+  grow: "#grow",
+  faq: "#faq",
+  insights: "#insights",
+  contact: "#contact",
 } as const;
 
 export const brand = {
@@ -41,9 +41,12 @@ export const contact = {
   emailHref: "mailto:info@vayutrack.com",
   office: "Ithum Tower, Sector 62, Noida",
   days: "Monday–Saturday",
-  hours: "10:00\u00a0AM–6:00\u00a0PM",
+  hours: "10:00 AM–6:00 PM",
   timezone: "India time",
 } as const;
+
+/** Opens the visitor's email app with a subject line filled in. */
+export const emailWithSubject = (subject: string) => `${contact.emailHref}?subject=${encodeURIComponent(subject)}`;
 
 export type NavLink = { label: string; href: string; description?: string };
 export type NavItem =
@@ -59,27 +62,17 @@ export const primaryNav: NavItem[] = [
       { label: "Express Freight", href: links.express, description: "Road freight and courier" },
       { label: "Air Freight", href: links.air, description: "Urgent and time-critical cargo" },
       { label: "Ocean Freight", href: links.ocean, description: "Larger and containerized cargo" },
-      { label: "Compare services", href: "#services", description: "See all three side by side" },
+      { label: "Compare services", href: links.services, description: "See all three side by side" },
     ],
   },
-  { kind: "link", label: "How It Works", href: "#how-it-works" },
-  { kind: "link", label: "About", href: "#about" },
-  {
-    kind: "menu",
-    label: "Grow With Us",
-    id: "grow",
-    items: [
-      { label: "Become a partner", href: links.partner, description: "Join the VayuTrack network" },
-      { label: "Careers", href: links.careers, description: "Current openings" },
-      { label: "Life at VayuTrack", href: links.culture, description: "Our people and culture" },
-    ],
-  },
+  { kind: "link", label: "How It Works", href: links.howItWorks },
+  { kind: "link", label: "About", href: links.about },
+  { kind: "link", label: "Grow With Us", href: links.grow },
 ];
 
 export const utilityNav: NavLink[] = [
   { label: "Contact", href: links.contact },
-  { label: "Locate us", href: links.locations },
-  { label: "Careers", href: links.careers },
+  { label: "FAQ", href: links.faq },
 ];
 
 export const footerGroups: { title: string; links: NavLink[] }[] = [
@@ -94,26 +87,24 @@ export const footerGroups: { title: string; links: NavLink[] }[] = [
   {
     title: "Ship & Track",
     links: [
-      { label: "Ship with VayuTrack", href: links.booking },
-      { label: "Track shipment", href: links.tracking },
-      { label: "Business enquiry", href: links.business },
-      { label: "Locate us", href: links.locations },
+      { label: "Track shipment", href: links.track },
+      { label: "How it works", href: links.howItWorks },
+      { label: "Plan a shipment", href: links.contact },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "About VayuTrack", href: links.about },
-      { label: "Become a partner", href: links.partner },
-      { label: "Careers", href: links.careers },
-      { label: "Life at VayuTrack", href: links.culture },
+      { label: "Grow with us", href: links.grow },
+      { label: "Insights", href: links.insights },
     ],
   },
   {
     title: "Support",
     links: [
       { label: "Contact us", href: links.contact },
-      { label: "Frequently asked questions", href: "#faq" },
+      { label: "Frequently asked questions", href: links.faq },
     ],
   },
 ];

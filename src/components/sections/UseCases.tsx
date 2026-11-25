@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useCases } from "@/content/home";
 import { Vignette } from "@/components/scene/fallback/Vignette";
 
@@ -41,7 +41,7 @@ export function UseCases() {
               <Tags tags={individuals.tags} />
             </div>
             <a href={individuals.action.href} className="btn btn-primary mt-7">
-              {individuals.action.label} <ArrowUpRight aria-hidden className="size-4" />
+              {individuals.action.label} <ArrowRight aria-hidden className="size-4" />
             </a>
           </div>
         </article>
@@ -58,7 +58,7 @@ export function UseCases() {
               <Tags tags={ecommerce.tags} />
             </div>
             <a href={ecommerce.action.href} className="btn btn-blue mt-7">
-              {ecommerce.action.label} <ArrowUpRight aria-hidden className="size-4" />
+              {ecommerce.action.label} <ArrowRight aria-hidden className="size-4" />
             </a>
           </div>
           <div className="relative flex items-center justify-center bg-white px-6 py-8 lg:col-span-7 lg:border-l lg:border-line lg:px-10">
@@ -81,7 +81,7 @@ export function UseCases() {
               <Tags tags={business.tags} />
             </div>
             <a href={business.action.href} className="btn btn-blue mt-7">
-              {business.action.label} <ArrowUpRight aria-hidden className="size-4" />
+              {business.action.label} <ArrowRight aria-hidden className="size-4" />
             </a>
           </div>
         </article>

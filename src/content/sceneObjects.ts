@@ -35,7 +35,7 @@ export const sceneObjects: SceneObjectInfo[] = [
     eyebrow: "Preparation & handling",
     title: "Organized before it moves on",
     body: "At the hub, shipments are sorted, handled with care and prepared for dispatch to the next leg of the journey.",
-    action: { label: "See how it works", href: "#how-it-works" },
+    action: { label: "See how it works", href: links.howItWorks },
   },
   {
     id: "parcel",
@@ -43,7 +43,7 @@ export const sceneObjects: SceneObjectInfo[] = [
     eyebrow: "Shipment progress",
     title: "Sample parcel DEMO-VT-001",
     body: "Every shipment carries a tracking number, so you can follow its progress from booking to delivery.",
-    action: { label: "Track a real shipment", href: "#track" },
+    action: { label: "Track a real shipment", href: links.track },
     showsSample: true,
   },
   {
@@ -52,7 +52,7 @@ export const sceneObjects: SceneObjectInfo[] = [
     eyebrow: "Final delivery",
     title: "The final handoff",
     body: "The journey ends with delivery to the recipient, completing the route from one doorstep to another.",
-    action: { label: "Plan a shipment", href: links.booking },
+    action: { label: "Plan a shipment", href: links.contact },
   },
 ];
 

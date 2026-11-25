@@ -69,7 +69,7 @@ src/
 
 ## Editing content
 
-All customer-facing text and destinations are in `src/content/`:
+All customer-facing text and destinations are in `src/content/`. Every link stays on this page (section anchors); the only outbound actions are the company phone number and email (`tel:` / `mailto:`). There are no links to the current vayutrack.com site.
 
 - `site.ts` — URLs, contact details, navigation, footer groups
 - `home.ts` — hero, capabilities, story, use cases, partnership, articles, final CTA
@@ -81,11 +81,11 @@ No statistics, testimonials, client logos, guarantees or coverage claims are inc
 
 Real tracking and the demo are kept separate.
 
-- **Default (no API configured):** the widget validates the number locally and hands the visitor to `https://vayutrack.com/track`, with a “Copy number” helper. It does not pretend a lookup happened and does not guess query parameters.
+- **Default (no API configured):** the widget validates the number locally and says plainly that live tracking isn’t connected yet, offering the sample journey or the contact section. It does not pretend a lookup happened and never sends the visitor to another site.
 - **“Try the sample journey”:** shows the fixed `DEMO-VT-001` fixture, always labelled “Illustrative demo — not a live shipment.” A typed number never produces sample events; typing `DEMO-VT-001` into the real field points the visitor to the sample action instead.
 - **When an approved API exists:** set `NEXT_PUBLIC_TRACKING_API_URL` to a URL template containing `{awb}` (for example `https://api.example.com/v1/shipments/{awb}`), then adapt `normalizeTrackingResponse` in `src/lib/tracking/adapter.ts` to the documented response. The widget already handles empty, invalid, loading, not-found (HTTP 404), network-error, server-error and success states. The current response mapping is a placeholder contract.
 
-Forms (booking, business enquiry, partner, contact) link to the existing pages. Nothing on this page reports a submission as sent.
+Shipping, business and partner calls to action scroll to the contact section, whose buttons open an email with the subject filled in (“Shipment enquiry”, “Business enquiry”, “Network partner enquiry”). Nothing on this page reports a submission as sent.
 
 ## Verification (25 Nov 2026)
 
@@ -105,8 +105,8 @@ Run against `next build` + `next start` in Chrome (Playwright, hardware WebGL vi
 | Offscreen / hidden tab | 0 WebGL draw calls when no scene is visible or the tab is hidden |
 | No WebGL (`--disable-webgl`) | No canvas, no three.js download; SVG world works with all controls |
 | WebGL context loss | Canvas removed, SVG illustration shown |
-| Tracking | Empty, invalid, sample-ID, valid hand-off and sample journey verified; API states verified against a mocked endpoint |
-| Destinations | All 15 external URLs returned HTTP 200 on 25 Nov 2026; all in-page anchors resolve |
+| Tracking | Empty, invalid, sample-ID, valid-number (“not connected”) and sample journey verified; API states verified against a mocked endpoint |
+| Links | No links to other websites; all in-page anchors resolve; service links open the matching tab |
 | Bundle | 218 KB JS (compressed) without 3D; +~280 KB three.js chunk loaded lazily on capable desktops |
 | Local CLS | 0 |
 
@@ -115,12 +115,12 @@ Not verified: real devices (iOS Safari, Android Chrome, low-end laptops), screen
 ## Client inputs needed before launch
 
 1. **Policies (FAQ):** confirm the cancellation (“before dispatch; support advises once in transit”) and returns (“pickups arranged and tracked”) wording. Both are flagged with `policyNeedsConfirmation` in `src/content/faq.ts`.
-2. **Tracking:** an approved tracking API (endpoint, auth, response schema), or confirmation that the hand-off to `/track` is the intended flow. Also confirm the real AWB format so validation can be tightened (it currently accepts 6–30 letters, numbers and dashes).
+2. **Tracking:** an approved tracking API (endpoint, auth, response schema). Until then a valid number shows a “live tracking isn’t connected yet” message. Also confirm the real AWB format so validation can be tightened (it currently accepts 6–30 letters, numbers and dashes).
 3. **Claims:** any statistics, review ratings, testimonials (current names: Rahul Mehta, Priya Sharma, Vikram Singh, Amit Patel, Neha Gupta), service guarantees or coverage you want shown, with evidence and permissions. None are used now.
 4. **Legal and social:** privacy, terms and refund-policy URLs, and real social profile URLs. None are linked until supplied.
 5. **Logo:** confirmation that the supplied “VayuTrack Express” artwork (`public/brand/`) is the approved mark, and a vector/SVG version if available. The favicon is cropped from this artwork.
 6. **Contact:** confirm the hours display (“Monday–Saturday, 10:00 AM–6:00 PM, India time”) and whether the alternate number 0120 463 4067 should appear.
 7. **Partnership:** any approved wording about partnership terms. The page currently only invites enquiries.
 8. **Articles:** the three insight excerpts are new summaries of the existing posts (all dated 10 May 2025). Confirm or replace them.
-9. **Forms backend:** if a homepage enquiry form is wanted, provide the endpoint. The page currently links to the existing enquiry and booking pages.
+9. **Forms backend:** if a homepage enquiry form is wanted, provide the endpoint. Enquiries currently go by email or phone.
 # vayutrack

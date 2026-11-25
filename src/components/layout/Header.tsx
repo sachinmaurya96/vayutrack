@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, ChevronDown, Clock, Mail, Menu, Phone, ScanLine, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Clock, Mail, Menu, Phone, ScanLine, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { contact, links, primaryNav, utilityNav, type NavItem } from "@/content/site";
@@ -100,7 +100,7 @@ function DesktopMenu({ item, open, onToggle, onClose }: { item: Extract<NavItem,
                   <span className="block font-bold text-navy">{l.label}</span>
                   {l.description && <span className="block text-[0.875rem] text-muted">{l.description}</span>}
                 </span>
-                <ArrowUpRight aria-hidden className="mt-1 size-4 shrink-0 text-blue opacity-60 group-hover:opacity-100" />
+                <ArrowRight aria-hidden className="mt-1 size-4 shrink-0 text-blue opacity-60 group-hover:opacity-100" />
               </a>
             </li>
           ))}
@@ -184,7 +184,7 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
                         <li key={l.href}>
                           <a href={l.href} onClick={onClose} className="flex min-h-12 items-center justify-between px-4 py-3 font-semibold text-navy">
                             {l.label}
-                            <ArrowUpRight aria-hidden className="size-4 text-blue" />
+                            <ArrowRight aria-hidden className="size-4 text-blue" />
                           </a>
                         </li>
                       ))}
@@ -199,7 +199,7 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
                     <li key={l.href}>
                       <a href={l.href} onClick={onClose} className="flex min-h-12 items-center justify-between px-4 py-3 font-semibold text-navy">
                         {l.label}
-                        <ArrowUpRight aria-hidden className="size-4 text-blue" />
+                        <ArrowRight aria-hidden className="size-4 text-blue" />
                       </a>
                     </li>
                   ))}
@@ -210,7 +210,7 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
               <a href="#track" onClick={(e) => trackClick(e, onClose)} className="btn btn-secondary w-full">
                 <ScanLine aria-hidden className="size-5" /> Track Shipment
               </a>
-              <a href={links.booking} className="btn btn-primary w-full">
+              <a href={links.contact} className="btn btn-primary w-full">
                 Ship With Us
               </a>
             </div>
@@ -284,7 +284,7 @@ export function Header() {
             <ScanLine aria-hidden className="size-[1.125rem]" />
             Track Shipment
           </a>
-          <a href={links.booking} className="btn btn-primary hidden md:inline-flex">
+          <a href={links.contact} className="btn btn-primary hidden md:inline-flex">
             Ship With Us
           </a>
           <button

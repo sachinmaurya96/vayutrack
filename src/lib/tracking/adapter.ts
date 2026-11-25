@@ -1,11 +1,9 @@
-import { links } from "@/content/site";
-
 /**
  * Tracking integration boundary.
  *
- * No tracking API has been approved, so the default adapter is "handoff": the
- * widget validates locally and sends visitors to the existing tracking page.
- * It never fabricates shipment events.
+ * No tracking API has been approved, so the default adapter is "unavailable":
+ * the widget validates locally and says that live tracking is not connected.
+ * It never fabricates shipment events and never sends visitors elsewhere.
  *
  * To connect an approved endpoint, set NEXT_PUBLIC_TRACKING_API_URL to a URL
  * template containing `{awb}`, e.g. https://api.example.com/v1/shipments/{awb}
@@ -21,21 +19,19 @@ export type LookupOutcome =
   | { kind: "error"; message: string };
 
 export type TrackingAdapter =
-  | { mode: "handoff"; trackingPageUrl: string }
+  | { mode: "unavailable" }
   | {
       mode: "api";
-      trackingPageUrl: string;
       lookup: (awb: string, signal: AbortSignal) => Promise<LookupOutcome>;
     };
 
 export function getTrackingAdapter(): TrackingAdapter {
   const template = process.env.NEXT_PUBLIC_TRACKING_API_URL;
   if (!template || !template.includes("{awb}")) {
-    return { mode: "handoff", trackingPageUrl: links.tracking };
+    return { mode: "unavailable" };
   }
   return {
     mode: "api",
-    trackingPageUrl: links.tracking,
     lookup: (awb, signal) => apiLookup(template, awb, signal),
   };
 }

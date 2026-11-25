@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Mail, Phone, Plus } from "lucide-react";
+import { ArrowRight, Mail, Phone, Plus } from "lucide-react";
 import { useState } from "react";
 import { faq } from "@/content/faq";
 import { contact } from "@/content/site";
@@ -60,7 +60,7 @@ export function Faq() {
                     <p className="max-w-[44rem] leading-relaxed text-ink">{item.answer}</p>
                     {item.link && (
                       <a href={item.link.href} className="link-arrow mt-1">
-                        {item.link.label} <ArrowUpRight aria-hidden className="size-4" />
+                        {item.link.label} <ArrowRight aria-hidden className="size-4" />
                       </a>
                     )}
                   </div>

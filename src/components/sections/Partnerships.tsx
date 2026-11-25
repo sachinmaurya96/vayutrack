@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { partnership } from "@/content/home";
 
 /** Abstract connected points; decorative only. */
@@ -41,13 +41,10 @@ export function Partnerships() {
               <p className="mt-5 max-w-[34rem] text-[1.0625rem] leading-relaxed text-white/80">{partnership.body}</p>
               <div className="mt-8 flex flex-col gap-4 xs:flex-row xs:flex-wrap xs:items-center">
                 <a href={partnership.primary.href} className="btn btn-primary">
-                  {partnership.primary.label} <ArrowRight aria-hidden className="size-4" />
+                  <Mail aria-hidden className="size-4" /> {partnership.primary.label}
                 </a>
-                <a href={partnership.secondary.href} className="link-arrow !text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">
-                  {partnership.secondary.label} <ArrowUpRight aria-hidden className="size-4" />
-                </a>
-                <a href={partnership.tertiary.href} className="link-arrow !text-white/85 hover:!text-white">
-                  {partnership.tertiary.label} <ArrowUpRight aria-hidden className="size-4" />
+                <a href={partnership.secondary.href} className="btn btn-ghost-dark">
+                  <Phone aria-hidden className="size-4" /> {partnership.secondary.label}
                 </a>
               </div>
             </div>

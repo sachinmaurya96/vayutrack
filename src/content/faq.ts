@@ -18,14 +18,14 @@ export const faq: FaqItem[] = [
     question: "What can VayuTrack help me ship?",
     answer:
       "VayuTrack offers courier delivery along with Express, Air and Ocean Freight for individuals and businesses. The right service depends on what you are sending, its size and where it needs to go, and our team can help you choose.",
-    link: { label: "Compare services", href: "#services" },
+    link: { label: "Compare services", href: links.services },
   },
   {
     id: "how-to-track",
     question: "How do I track my shipment?",
     answer:
-      "Enter your AWB or tracking number in the tracking box at the top of this page and continue to our tracking page for the latest status. If you need help, contact our team.",
-    link: { label: "Go to tracking", href: links.tracking },
+      "Enter your AWB or tracking number in the tracking box at the top of this page. If you need help with a shipment, contact our team by phone or email.",
+    link: { label: "Track a shipment", href: links.track },
   },
   {
     id: "cancel",
@@ -48,6 +48,6 @@ export const faq: FaqItem[] = [
     question: "How long will delivery take?",
     answer:
       "Delivery time depends on the distance, the service you choose and your shipment’s requirements. Ask our team for an estimate for your shipment.",
-    link: { label: "Ask for an estimate", href: links.business },
+    link: { label: "Ask for an estimate", href: links.contact },
   },
 ];

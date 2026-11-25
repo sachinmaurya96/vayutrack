@@ -1,12 +1,12 @@
-import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { finalCta } from "@/content/home";
-import { contact, links } from "@/content/site";
+import { contact } from "@/content/site";
 
 export function FinalCta() {
   const rows = [
     { icon: Phone, label: "Call our team", value: contact.phone, href: contact.phoneHref },
     { icon: Mail, label: "Email", value: contact.email, href: contact.emailHref },
-    { icon: MapPin, label: "Office", value: contact.office, href: links.locations },
+    { icon: MapPin, label: "Office", value: contact.office },
     { icon: Clock, label: "Working hours", value: `${contact.days}, ${contact.hours}`, note: contact.timezone },
   ];
   return (
@@ -20,7 +20,7 @@ export function FinalCta() {
             <p className="type-lead mt-5 max-w-[30rem]">{finalCta.body}</p>
             <div className="mt-8 flex flex-col gap-3 xs:flex-row xs:flex-wrap">
               <a href={finalCta.primary.href} className="btn btn-primary">
-                {finalCta.primary.label} <ArrowRight aria-hidden className="size-4" />
+                <Mail aria-hidden className="size-4" /> {finalCta.primary.label}
               </a>
               <a href={finalCta.secondary.href} className="btn btn-secondary">
                 {finalCta.secondary.label}

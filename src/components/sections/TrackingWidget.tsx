@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, CircleAlert, Copy, LoaderCircle, Search, X } from "lucide-react";
+import { ArrowRight, CircleAlert, LoaderCircle, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { timelineStates } from "@/content/journey";
 import { useScene } from "@/components/scene/store";
@@ -8,10 +8,11 @@ import { ShipmentTimeline } from "@/components/ui/ShipmentTimeline";
 import { getTrackingAdapter, type TrackingResult } from "@/lib/tracking/adapter";
 import { sampleShipment } from "@/lib/tracking/sample";
 import { validateTrackingNumber } from "@/lib/tracking/validate";
+import { links } from "@/content/site";
 
 type Status =
   | { kind: "idle" }
-  | { kind: "handoff"; awb: string }
+  | { kind: "unavailable"; awb: string }
   | { kind: "loading"; awb: string }
   | { kind: "not-found"; awb: string }
   | { kind: "error"; awb: string; message: string }
@@ -25,7 +26,6 @@ export function TrackingWidget() {
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [sampleOpen, setSampleOpen] = useState(false);
-  const [copied, setCopied] = useState<"idle" | "done" | "failed">("idle");
   const abort = useRef<AbortController | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const select = useScene((s) => s.select);
@@ -34,7 +34,6 @@ export function TrackingWidget() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setCopied("idle");
     const check = validateTrackingNumber(value);
     if (!check.ok) {
       setError(check.message);
@@ -43,8 +42,8 @@ export function TrackingWidget() {
       return;
     }
     setError(null);
-    if (adapter.mode === "handoff") {
-      setStatus({ kind: "handoff", awb: check.value });
+    if (adapter.mode === "unavailable") {
+      setStatus({ kind: "unavailable", awb: check.value });
       return;
     }
     abort.current?.abort();
@@ -59,15 +58,6 @@ export function TrackingWidget() {
       else setStatus({ kind: "error", awb: check.value, message: outcome.message });
     } catch {
       if (!ctrl.signal.aborted) setStatus({ kind: "error", awb: check.value, message: "Something went wrong while checking this number." });
-    }
-  }
-
-  async function copy(awb: string) {
-    try {
-      await navigator.clipboard.writeText(awb);
-      setCopied("done");
-    } catch {
-      setCopied("failed");
     }
   }
 
@@ -126,21 +116,20 @@ export function TrackingWidget() {
       </form>
 
       <div role="status" aria-live="polite">
-        {status.kind === "handoff" && (
+        {status.kind === "unavailable" && (
           <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50 p-4">
-            <p className="font-bold text-navy">Continue on our tracking page</p>
+            <p className="font-bold text-navy">Live tracking isn’t connected yet</p>
             <p className="mt-1 text-[0.9375rem] text-ink">
-              Live status for <span className="font-mono font-bold">{status.awb}</span> is available on VayuTrack’s tracking page. Enter the number there to see the latest updates.
+              No status was looked up for <span className="font-mono font-bold">{status.awb}</span>. Use the sample journey below to see how shipment updates appear, or contact our team for help with this shipment.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <a href={adapter.trackingPageUrl} className="btn btn-blue">
-                Open tracking page <ArrowUpRight aria-hidden className="size-4" />
-              </a>
-              <button type="button" onClick={() => copy(status.awb)} className="btn btn-secondary">
-                <Copy aria-hidden className="size-4" /> {copied === "done" ? "Number copied" : "Copy number"}
+              <button type="button" onClick={openSample} className="btn btn-blue">
+                Try the sample journey <ArrowRight aria-hidden className="size-4" />
               </button>
+              <a href={links.contact} className="btn btn-secondary">
+                Contact our team
+              </a>
             </div>
-            {copied === "failed" && <p className="mt-2 text-[0.875rem] text-muted">Copying isn’t available here. Select the number above to copy it.</p>}
           </div>
         )}
         {status.kind === "loading" && <p className="mt-4 text-[0.9375rem] font-semibold text-muted">Checking {status.awb}…</p>}
@@ -153,9 +142,9 @@ export function TrackingWidget() {
         {status.kind === "error" && (
           <div className="mt-4 rounded-2xl border border-error/30 bg-error-bg p-4">
             <p className="font-bold text-error">Tracking is unavailable right now</p>
-            <p className="mt-1 text-[0.9375rem] text-ink">{status.message} You can try again or use the tracking page.</p>
-            <a href={adapter.trackingPageUrl} className="link-arrow">
-              Open tracking page <ArrowUpRight aria-hidden className="size-4" />
+            <p className="mt-1 text-[0.9375rem] text-ink">{status.message} Please try again, or contact our team for help.</p>
+            <a href={links.contact} className="link-arrow">
+              Contact our team <ArrowRight aria-hidden className="size-4" />
             </a>
           </div>
         )}
