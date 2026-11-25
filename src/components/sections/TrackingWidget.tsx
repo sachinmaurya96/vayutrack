@@ -9,6 +9,7 @@ import { getTrackingAdapter, type TrackingResult } from "@/lib/tracking/adapter"
 import { sampleShipment } from "@/lib/tracking/sample";
 import { validateTrackingNumber } from "@/lib/tracking/validate";
 import { links } from "@/content/site";
+import { AppLink } from "@/components/ui/AppLink";
 
 type Status =
   | { kind: "idle" }
@@ -126,9 +127,9 @@ export function TrackingWidget() {
               <button type="button" onClick={openSample} className="btn btn-blue">
                 Try the sample journey <ArrowRight aria-hidden className="size-4" />
               </button>
-              <a href={links.contact} className="btn btn-secondary">
+              <AppLink href={links.contact} className="btn btn-secondary">
                 Contact our team
-              </a>
+              </AppLink>
             </div>
           </div>
         )}
@@ -143,9 +144,9 @@ export function TrackingWidget() {
           <div className="mt-4 rounded-2xl border border-error/30 bg-error-bg p-4">
             <p className="font-bold text-error">Tracking is unavailable right now</p>
             <p className="mt-1 text-[0.9375rem] text-ink">{status.message} Please try again, or contact our team for help.</p>
-            <a href={links.contact} className="link-arrow">
+            <AppLink href={links.contact} className="link-arrow">
               Contact our team <ArrowRight aria-hidden className="size-4" />
-            </a>
+            </AppLink>
           </div>
         )}
         {status.kind === "found" && (

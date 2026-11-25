@@ -52,7 +52,7 @@ export const sceneObjects: SceneObjectInfo[] = [
     eyebrow: "Final delivery",
     title: "The final handoff",
     body: "The journey ends with delivery to the recipient, completing the route from one doorstep to another.",
-    action: { label: "Plan a shipment", href: links.contact },
+    action: { label: "Plan a shipment", href: links.booking },
   },
 ];
 

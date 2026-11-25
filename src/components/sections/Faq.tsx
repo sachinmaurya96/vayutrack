@@ -2,36 +2,39 @@
 
 import { ArrowRight, Mail, Phone, Plus } from "lucide-react";
 import { useState } from "react";
-import { faq } from "@/content/faq";
+import { faq, type FaqItem } from "@/content/faq";
 import { contact } from "@/content/site";
+import { AppLink } from "@/components/ui/AppLink";
 
-export function Faq() {
-  const [open, setOpen] = useState<string | null>(faq[0].id);
+type Props = { items?: FaqItem[]; id?: string; eyebrow?: string; heading?: string; tone?: "light" | "white" };
+
+export function Faq({ items = faq, id = "faq", eyebrow = "FAQ", heading = "Before you send.", tone = "light" }: Props) {
+  const [open, setOpen] = useState<string | null>(items[0]?.id ?? null);
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="bg-bg py-20 lg:py-28">
+    <section id={id} aria-labelledby={`${id}-heading`} className={`${tone === "white" ? "bg-white" : "bg-bg"} py-20 lg:py-28`}>
       <div className="container-page grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
-          <p className="eyebrow">FAQ</p>
-          <h2 id="faq-heading" className="type-h2 mt-3">
-            Before you send.
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 id={`${id}-heading`} className="type-h2 mt-3">
+            {heading}
           </h2>
           <p className="mt-4 text-[1.0625rem] text-muted">Can’t find what you need? Our team is available {contact.days}, {contact.hours}.</p>
           <ul className="mt-6 grid gap-2">
             <li>
-              <a href={contact.phoneHref} className="inline-flex min-h-11 items-center gap-2 font-bold text-navy hover:text-blue">
+              <AppLink href={contact.phoneHref} className="inline-flex min-h-11 items-center gap-2 font-bold text-navy hover:text-blue">
                 <Phone aria-hidden className="size-4 text-blue" /> {contact.phone}
-              </a>
+              </AppLink>
             </li>
             <li>
-              <a href={contact.emailHref} className="inline-flex min-h-11 items-center gap-2 font-bold text-navy hover:text-blue">
+              <AppLink href={contact.emailHref} className="inline-flex min-h-11 items-center gap-2 font-bold text-navy hover:text-blue">
                 <Mail aria-hidden className="size-4 text-blue" /> {contact.email}
-              </a>
+              </AppLink>
             </li>
           </ul>
         </div>
         <div className="lg:col-span-8">
           <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-white">
-            {faq.map((item) => {
+            {items.map((item) => {
               const expanded = open === item.id;
               return (
                 <li key={item.id}>
@@ -59,9 +62,9 @@ export function Faq() {
                   >
                     <p className="max-w-[44rem] leading-relaxed text-ink">{item.answer}</p>
                     {item.link && (
-                      <a href={item.link.href} className="link-arrow mt-1">
+                      <AppLink href={item.link.href} className="link-arrow mt-1">
                         {item.link.label} <ArrowRight aria-hidden className="size-4" />
-                      </a>
+                      </AppLink>
                     )}
                   </div>
                 </li>

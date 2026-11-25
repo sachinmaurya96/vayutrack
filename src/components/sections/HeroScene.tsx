@@ -5,11 +5,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { sceneIntro, sceneObjectById, sceneObjects, type SceneObjectId } from "@/content/sceneObjects";
 import { sampleShipment, SAMPLE_NOTICE } from "@/lib/tracking/sample";
 import { timelineStates } from "@/content/journey";
+import { links } from "@/content/site";
 import { focusTrackingInput } from "@/lib/focusTracking";
 import { SceneControls } from "@/components/scene/SceneControls";
 import { SceneSlot } from "@/components/scene/SceneSlot";
 import { useScene } from "@/components/scene/store";
 import { ShipmentTimeline } from "@/components/ui/ShipmentTimeline";
+import { AppLink } from "@/components/ui/AppLink";
 
 const icons: Record<SceneObjectId, typeof Truck> = { truck: Truck, hub: Warehouse, parcel: Package, destination: Building2 };
 const sampleIndex = timelineStates.findIndex((s) => s.key === sampleShipment.currentKey);
@@ -47,15 +49,15 @@ function ScenePanel() {
               </div>
             )}
             {info && (
-              <a
+              <AppLink
                 href={info.action.href}
                 onClick={(e) => {
-                  if (info.action.href === "#track" && focusTrackingInput()) e.preventDefault();
+                  if (info.action.href === links.track && focusTrackingInput()) e.preventDefault();
                 }}
                 className="link-arrow mt-1"
               >
                 {info.action.label} <ArrowRight aria-hidden className="size-4" />
-              </a>
+              </AppLink>
             )}
           </motion.div>
         </AnimatePresence>

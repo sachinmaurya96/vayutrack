@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import { Footer } from "@/components/layout/Footer";
+import { Header, UtilityBar } from "@/components/layout/Header";
+import { MotionClassSync } from "@/components/scene/SceneControls";
+import { SceneHost } from "@/components/scene/SceneHost";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -9,7 +13,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "VayuTrack — Courier & Freight Solutions",
+  title: { default: "VayuTrack — Courier & Freight Solutions", template: "%s · VayuTrack" },
   description:
     "Courier delivery with Express, Air and Ocean Freight for individuals and growing businesses. Plan your shipment, follow its progress, and stay connected from pickup to delivery.",
 };
@@ -26,7 +30,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
+        <UtilityBar />
+        <Header />
         {children}
+        <Footer />
+        <SceneHost />
+        <MotionClassSync />
       </body>
     </html>
   );

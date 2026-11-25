@@ -62,7 +62,8 @@ export function SceneHost() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  // Decide on WebGL once the page is idle; revisit if the viewport crosses the breakpoint.
+  // Decide on WebGL once a page has a scene slot and the browser is idle;
+  // revisit if the viewport crosses the breakpoint.
   useEffect(() => {
     const decide = () => {
       const cap = detectSceneCapability();
@@ -74,7 +75,15 @@ export function SceneHost() {
       setRenderMode("webgl");
     };
     const idle = "requestIdleCallback" in window;
-    const id = idle ? window.requestIdleCallback(decide, { timeout: 1200 }) : window.setTimeout(decide, 400);
+    let id = 0;
+    let scheduled = false;
+    const scheduleDecide = () => {
+      if (scheduled || allSlots().length === 0) return;
+      scheduled = true;
+      id = idle ? window.requestIdleCallback(decide, { timeout: 1200 }) : window.setTimeout(decide, 400);
+    };
+    const offSlots = onSlotsChange(scheduleDecide);
+    scheduleDecide();
     const mq = window.matchMedia(DESKTOP_SCENE_QUERY);
     const onChange = () => {
       const { renderMode: mode, fallbackReason } = useScene.getState();
@@ -83,6 +92,7 @@ export function SceneHost() {
     };
     mq.addEventListener("change", onChange);
     return () => {
+      offSlots();
       mq.removeEventListener("change", onChange);
       if (idle) window.cancelIdleCallback(id);
       else window.clearTimeout(id);
@@ -123,7 +133,8 @@ export function SceneHost() {
         const slots = allSlots();
         let best: SlotEntry | null = null;
         for (const s of slots) if (s.visibleArea > 0 && (!best || s.visibleArea > best.visibleArea)) best = s;
-        const cur = current.current;
+        // The slot holding the canvas may have been unregistered by a page change.
+        const cur = current.current && slots.includes(current.current) ? current.current : null;
         // Small hysteresis so the canvas does not flip between two half-visible slots.
         if (best && cur && best !== cur && cur.visibleArea > 0 && best.visibleArea < cur.visibleArea * 1.15) best = cur;
 

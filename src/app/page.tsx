@@ -1,7 +1,3 @@
-import { Footer } from "@/components/layout/Footer";
-import { Header, UtilityBar } from "@/components/layout/Header";
-import { MotionClassSync } from "@/components/scene/SceneControls";
-import { SceneHost } from "@/components/scene/SceneHost";
 import { CapabilityStrip } from "@/components/sections/CapabilityStrip";
 import { CompanyStory } from "@/components/sections/CompanyStory";
 import { Faq } from "@/components/sections/Faq";
@@ -15,10 +11,7 @@ import { UseCases } from "@/components/sections/UseCases";
 
 export default function Home() {
   return (
-    <>
-      <UtilityBar />
-      <Header />
-      <main id="main" tabIndex={-1} className="outline-none">
+    <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <CapabilityStrip />
         <ServiceExplorer />
@@ -29,10 +22,6 @@ export default function Home() {
         <Faq />
         <Insights />
         <FinalCta />
-      </main>
-      <Footer />
-      <SceneHost />
-      <MotionClassSync />
-    </>
+    </main>
   );
 }

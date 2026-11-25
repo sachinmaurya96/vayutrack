@@ -24,6 +24,8 @@ export function registerSlot(entry: SlotEntry) {
   slots.set(entry.view, entry);
   notify();
   return () => {
+    // A slot that leaves (page change, hidden route) is no longer visible anywhere.
+    entry.visibleArea = 0;
     if (slots.get(entry.view) === entry) slots.delete(entry.view);
     notify();
   };

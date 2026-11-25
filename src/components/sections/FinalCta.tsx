@@ -1,30 +1,43 @@
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { finalCta } from "@/content/home";
-import { contact } from "@/content/site";
+import { contact, links } from "@/content/site";
+import { AppLink } from "@/components/ui/AppLink";
 
-export function FinalCta() {
+type Action = { label: string; href: string };
+
+type Props = {
+  id?: string;
+  heading?: string;
+  body?: string;
+  primary?: Action;
+  secondary?: Action;
+  tone?: "light" | "white";
+};
+
+/** Contact call-to-action with the real company details. Reused at the end of most pages. */
+export function FinalCta({ id = "contact", heading = finalCta.heading, body = finalCta.body, primary = finalCta.primary, secondary = finalCta.secondary, tone = "light" }: Props) {
   const rows = [
     { icon: Phone, label: "Call our team", value: contact.phone, href: contact.phoneHref },
     { icon: Mail, label: "Email", value: contact.email, href: contact.emailHref },
-    { icon: MapPin, label: "Office", value: contact.office },
+    { icon: MapPin, label: "Office", value: contact.office, href: links.locations },
     { icon: Clock, label: "Working hours", value: `${contact.days}, ${contact.hours}`, note: contact.timezone },
   ];
   return (
-    <section id="contact" aria-labelledby="cta-heading" className="bg-bg py-20 lg:py-28">
+    <section id={id} aria-labelledby={`${id}-heading`} className={`${tone === "white" ? "bg-white" : "bg-bg"} py-20 lg:py-28`}>
       <div className="container-page">
         <div className="panel grid gap-10 overflow-hidden p-8 sm:p-12 lg:grid-cols-12 lg:gap-16 lg:p-16">
           <div className="lg:col-span-6">
-            <h2 id="cta-heading" className="type-h2">
-              {finalCta.heading}
+            <h2 id={`${id}-heading`} className="type-h2">
+              {heading}
             </h2>
-            <p className="type-lead mt-5 max-w-[30rem]">{finalCta.body}</p>
+            <p className="type-lead mt-5 max-w-[30rem]">{body}</p>
             <div className="mt-8 flex flex-col gap-3 xs:flex-row xs:flex-wrap">
-              <a href={finalCta.primary.href} className="btn btn-primary">
-                <Mail aria-hidden className="size-4" /> {finalCta.primary.label}
-              </a>
-              <a href={finalCta.secondary.href} className="btn btn-secondary">
-                {finalCta.secondary.label}
-              </a>
+              <AppLink href={primary.href} className="btn btn-primary">
+                {primary.label} <ArrowRight aria-hidden className="size-4" />
+              </AppLink>
+              <AppLink href={secondary.href} className="btn btn-secondary">
+                {secondary.label}
+              </AppLink>
             </div>
           </div>
           <dl className="grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line sm:grid-cols-2 lg:col-span-6">
@@ -37,9 +50,9 @@ export function FinalCta() {
                   </dt>
                   <dd className="text-[1.0625rem] font-bold text-navy">
                     {r.href ? (
-                      <a href={r.href} className="hover:text-blue hover:underline hover:underline-offset-4">
+                      <AppLink href={r.href} className="hover:text-blue hover:underline hover:underline-offset-4">
                         {r.value}
-                      </a>
+                      </AppLink>
                     ) : (
                       r.value
                     )}

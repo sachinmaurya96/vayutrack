@@ -48,6 +48,6 @@ export const faq: FaqItem[] = [
     question: "How long will delivery take?",
     answer:
       "Delivery time depends on the distance, the service you choose and your shipment’s requirements. Ask our team for an estimate for your shipment.",
-    link: { label: "Ask for an estimate", href: links.contact },
+    link: { label: "Ask for an estimate", href: links.business },
   },
 ];

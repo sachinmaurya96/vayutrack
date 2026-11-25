@@ -2,6 +2,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { hero } from "@/content/home";
 import { HeroScene } from "./HeroScene";
 import { TrackingWidget } from "./TrackingWidget";
+import { AppLink } from "@/components/ui/AppLink";
 
 export function Hero() {
   return (
@@ -19,12 +20,12 @@ export function Hero() {
             </h1>
             <p className="type-lead mt-5 max-w-[33rem]">{hero.body}</p>
             <div className="mt-7 flex flex-col gap-3 xs:flex-row xs:flex-wrap">
-              <a href={hero.primary.href} className="btn btn-primary">
+              <AppLink href={hero.primary.href} className="btn btn-primary">
                 {hero.primary.label} <ArrowRight aria-hidden className="size-4" />
-              </a>
-              <a href={hero.secondary.href} className="btn btn-secondary">
+              </AppLink>
+              <AppLink href={hero.secondary.href} className="btn btn-secondary">
                 {hero.secondary.label} <ArrowDown aria-hidden className="size-4" />
-              </a>
+              </AppLink>
             </div>
             <div className="mt-8 max-w-[35rem]">
               <TrackingWidget />

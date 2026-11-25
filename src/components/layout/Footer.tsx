@@ -1,4 +1,5 @@
 import { brand, contact, footerGroups } from "@/content/site";
+import { AppLink } from "@/components/ui/AppLink";
 import { Logo } from "@/components/ui/Logo";
 import { CurrentYear } from "./CurrentYear";
 
@@ -29,9 +30,9 @@ export function Footer() {
               <ul className="mt-4 grid gap-1">
                 {g.links.map((l) => (
                   <li key={l.href}>
-                    <a href={l.href} className="inline-flex min-h-10 items-center text-[0.9375rem] text-muted hover:text-blue hover:underline hover:underline-offset-4">
+                    <AppLink href={l.href} className="inline-flex min-h-10 items-center text-[0.9375rem] text-muted hover:text-blue hover:underline hover:underline-offset-4">
                       {l.label}
-                    </a>
+                    </AppLink>
                   </li>
                 ))}
               </ul>

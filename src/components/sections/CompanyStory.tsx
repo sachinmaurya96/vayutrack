@@ -1,5 +1,6 @@
 import { ArrowRight, Headset, House, PackageCheck, Plane, Ship, Truck, Warehouse, FileText, Handshake, MessageSquare } from "lucide-react";
 import { story } from "@/content/home";
+import { AppLink } from "@/components/ui/AppLink";
 
 /** Role nodes positioned in percentages of the illustration box. */
 const nodes = [
@@ -13,7 +14,7 @@ const nodes = [
 
 const centre = { x: 50, y: 50 };
 
-function NetworkIllustration() {
+export function NetworkIllustration() {
   const W = 100;
   const H = 100;
   const curve = (a: { x: number; y: number }, b: { x: number; y: number }, bend = 0.18) => {
@@ -97,9 +98,9 @@ export function CompanyStory() {
           </ul>
           <div className="mt-9 flex flex-col gap-3 xs:flex-row">
             {story.actions.map((a, i) => (
-              <a key={a.href} href={a.href} className={`btn ${i === 0 ? "btn-blue" : "btn-secondary"}`}>
+              <AppLink key={a.href} href={a.href} className={`btn ${i === 0 ? "btn-blue" : "btn-secondary"}`}>
                 {a.label} <ArrowRight aria-hidden className="size-4" />
-              </a>
+              </AppLink>
             ))}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { useCases } from "@/content/home";
 import { Vignette } from "@/components/scene/fallback/Vignette";
+import { AppLink } from "@/components/ui/AppLink";
 
 function Tags({ tags }: { tags: string[] }) {
   return (
@@ -40,9 +41,9 @@ export function UseCases() {
             <div className="mt-5">
               <Tags tags={individuals.tags} />
             </div>
-            <a href={individuals.action.href} className="btn btn-primary mt-7">
+            <AppLink href={individuals.action.href} className="btn btn-primary mt-7">
               {individuals.action.label} <ArrowRight aria-hidden className="size-4" />
-            </a>
+            </AppLink>
           </div>
         </article>
 
@@ -57,9 +58,9 @@ export function UseCases() {
             <div className="mt-5">
               <Tags tags={ecommerce.tags} />
             </div>
-            <a href={ecommerce.action.href} className="btn btn-blue mt-7">
+            <AppLink href={ecommerce.action.href} className="btn btn-blue mt-7">
               {ecommerce.action.label} <ArrowRight aria-hidden className="size-4" />
-            </a>
+            </AppLink>
           </div>
           <div className="relative flex items-center justify-center bg-white px-6 py-8 lg:col-span-7 lg:border-l lg:border-line lg:px-10">
             <Vignette art={ecommerce.art} className="w-full max-w-[34rem]" />
@@ -80,9 +81,9 @@ export function UseCases() {
             <div className="mt-5">
               <Tags tags={business.tags} />
             </div>
-            <a href={business.action.href} className="btn btn-blue mt-7">
+            <AppLink href={business.action.href} className="btn btn-blue mt-7">
               {business.action.label} <ArrowRight aria-hidden className="size-4" />
-            </a>
+            </AppLink>
           </div>
         </article>
       </div>

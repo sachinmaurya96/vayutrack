@@ -2,17 +2,21 @@
 
 import { ArrowRight, ChevronDown, Clock, Mail, Menu, Phone, ScanLine, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { contact, links, primaryNav, utilityNav, type NavItem } from "@/content/site";
 import { focusTrackingInput } from "@/lib/focusTracking";
 import { Logo } from "@/components/ui/Logo";
 
+/** Focus the tracking box when this page has one; otherwise go to /track. */
 function trackClick(e: React.MouseEvent<HTMLAnchorElement>, after?: () => void) {
-  if (focusTrackingInput()) {
-    e.preventDefault();
-    history.replaceState(null, "", "#track");
-  }
+  if (focusTrackingInput()) e.preventDefault();
   after?.();
+}
+
+function isActive(pathname: string, match?: readonly string[]) {
+  return !!match?.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 }
 
 export function UtilityBar() {
@@ -30,7 +34,7 @@ export function UtilityBar() {
               <Mail aria-hidden className="size-4" /> {contact.email}
             </a>
           </li>
-          <li className="inline-flex items-center gap-2">
+          <li className="hidden items-center gap-2 xl:inline-flex">
             <Clock aria-hidden className="size-4" /> {contact.days}, {contact.hours} <span className="text-white/65">({contact.timezone})</span>
           </li>
         </ul>
@@ -38,9 +42,9 @@ export function UtilityBar() {
           <ul className="flex items-center gap-5">
             {utilityNav.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="hover:text-white hover:underline underline-offset-4">
+                <Link href={l.href} className="hover:text-white hover:underline underline-offset-4">
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -50,10 +54,23 @@ export function UtilityBar() {
   );
 }
 
-function DesktopMenu({ item, open, onToggle, onClose }: { item: Extract<NavItem, { kind: "menu" }>; open: boolean; onToggle: () => void; onClose: () => void }) {
+function DesktopMenu({
+  item,
+  open,
+  active,
+  onToggle,
+  onClose,
+}: {
+  item: Extract<NavItem, { kind: "menu" }>;
+  open: boolean;
+  active: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
   const panelId = useId();
   const wrap = useRef<HTMLLIElement>(null);
   const button = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
   useEffect(() => {
     if (!open) return;
     const onPointer = (e: PointerEvent) => {
@@ -86,7 +103,7 @@ function DesktopMenu({ item, open, onToggle, onClose }: { item: Extract<NavItem,
         aria-expanded={open}
         aria-controls={panelId}
         onClick={onToggle}
-        className="inline-flex min-h-12 items-center gap-1.5 rounded-full px-3.5 text-[0.9375rem] font-semibold text-navy hover:bg-blue-50"
+        className={`inline-flex min-h-12 items-center gap-1.5 rounded-full px-3.5 text-[0.9375rem] font-semibold hover:bg-blue-50 ${active ? "text-blue" : "text-navy"}`}
       >
         {item.label}
         <ChevronDown aria-hidden className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -95,13 +112,18 @@ function DesktopMenu({ item, open, onToggle, onClose }: { item: Extract<NavItem,
         <ul>
           {item.items.map((l) => (
             <li key={l.href}>
-              <a href={l.href} onClick={onClose} className="group flex items-start justify-between gap-3 rounded-xl px-4 py-3 hover:bg-blue-50">
+              <Link
+                href={l.href}
+                onClick={onClose}
+                aria-current={pathname === l.href ? "page" : undefined}
+                className="group flex items-start justify-between gap-3 rounded-xl px-4 py-3 hover:bg-blue-50 aria-[current=page]:bg-blue-50"
+              >
                 <span>
                   <span className="block font-bold text-navy">{l.label}</span>
                   {l.description && <span className="block text-[0.875rem] text-muted">{l.description}</span>}
                 </span>
                 <ArrowRight aria-hidden className="mt-1 size-4 shrink-0 text-blue opacity-60 group-hover:opacity-100" />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -113,6 +135,7 @@ function DesktopMenu({ item, open, onToggle, onClose }: { item: Extract<NavItem,
 function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: () => void; returnFocus: React.RefObject<HTMLButtonElement | null> }) {
   const dialog = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const pathname = usePathname();
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -144,6 +167,8 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
     };
   }, [open, onClose, returnFocus]);
 
+  const row = "flex min-h-12 items-center justify-between px-4 py-3 font-semibold text-navy aria-[current=page]:text-blue";
+
   return (
     <AnimatePresence>
       {open && (
@@ -160,9 +185,9 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
           className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-white lg:hidden"
         >
           <div className="container-page flex h-[72px] shrink-0 items-center justify-between border-b border-line">
-            <a href="#top" onClick={onClose} aria-label="VayuTrack home">
+            <Link href="/" onClick={onClose} aria-label="VayuTrack home">
               <Logo height={44} />
-            </a>
+            </Link>
             <button type="button" onClick={onClose} className="inline-flex size-12 items-center justify-center rounded-full border border-line text-navy" aria-label="Close menu">
               <X aria-hidden className="size-5" />
             </button>
@@ -172,9 +197,9 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
               {primaryNav.map((item) =>
                 item.kind === "link" ? (
                   <li key={item.label}>
-                    <a href={item.href} onClick={onClose} className="block py-2 text-xl font-bold text-navy">
+                    <Link href={item.href} onClick={onClose} aria-current={pathname === item.href ? "page" : undefined} className="block py-2 text-xl font-bold text-navy aria-[current=page]:text-blue">
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ) : (
                   <li key={item.label}>
@@ -182,10 +207,10 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
                     <ul className="divide-y divide-line rounded-2xl border border-line">
                       {item.items.map((l) => (
                         <li key={l.href}>
-                          <a href={l.href} onClick={onClose} className="flex min-h-12 items-center justify-between px-4 py-3 font-semibold text-navy">
+                          <Link href={l.href} onClick={onClose} aria-current={pathname === l.href ? "page" : undefined} className={row}>
                             {l.label}
                             <ArrowRight aria-hidden className="size-4 text-blue" />
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -193,26 +218,26 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
                 ),
               )}
               <li>
-                <p className="eyebrow mb-2">Support</p>
+                <p className="eyebrow mb-2">More</p>
                 <ul className="divide-y divide-line rounded-2xl border border-line">
                   {utilityNav.map((l) => (
                     <li key={l.href}>
-                      <a href={l.href} onClick={onClose} className="flex min-h-12 items-center justify-between px-4 py-3 font-semibold text-navy">
+                      <Link href={l.href} onClick={onClose} aria-current={pathname === l.href ? "page" : undefined} className={row}>
                         {l.label}
                         <ArrowRight aria-hidden className="size-4 text-blue" />
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </li>
             </ul>
             <div className="mt-8 grid gap-3">
-              <a href="#track" onClick={(e) => trackClick(e, onClose)} className="btn btn-secondary w-full">
+              <Link href={links.track} onClick={(e) => trackClick(e, onClose)} className="btn btn-secondary w-full">
                 <ScanLine aria-hidden className="size-5" /> Track Shipment
-              </a>
-              <a href={links.contact} className="btn btn-primary w-full">
+              </Link>
+              <Link href={links.booking} onClick={onClose} className="btn btn-primary w-full">
                 Ship With Us
-              </a>
+              </Link>
             </div>
             <dl className="mt-8 space-y-2 text-[0.9375rem] text-muted">
               <div>
@@ -246,6 +271,7 @@ function MobileMenu({ open, onClose, returnFocus }: { open: boolean; onClose: ()
 }
 
 export function Header() {
+  const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -255,22 +281,27 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white">
       <div className="container-page flex h-[72px] items-center justify-between gap-4">
-        <a href="#top" className="shrink-0 rounded-lg" aria-label="VayuTrack home">
+        <Link href="/" className="shrink-0 rounded-lg" aria-label="VayuTrack home">
           <Logo height={50} eager />
-        </a>
+        </Link>
         <nav aria-label="Primary" className="hidden lg:block">
           <ul className="flex items-center gap-0.5 xl:gap-1.5">
             {primaryNav.map((item) =>
               item.kind === "link" ? (
                 <li key={item.label}>
-                  <a href={item.href} className="inline-flex min-h-12 items-center rounded-full px-3.5 text-[0.9375rem] font-semibold text-navy hover:bg-blue-50">
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(pathname, item.match) ? "page" : undefined}
+                    className="inline-flex min-h-12 items-center rounded-full px-3.5 text-[0.9375rem] font-semibold text-navy hover:bg-blue-50 aria-[current=page]:text-blue"
+                  >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ) : (
                 <DesktopMenu
                   key={item.label}
                   item={item}
+                  active={isActive(pathname, item.match)}
                   open={openMenu === item.id}
                   onToggle={() => setOpenMenu((m) => (m === item.id ? null : item.id))}
                   onClose={closeMenus}
@@ -280,13 +311,13 @@ export function Header() {
           </ul>
         </nav>
         <div className="flex items-center gap-2 xl:gap-3">
-          <a href="#track" onClick={(e) => trackClick(e)} className="btn btn-secondary hidden !px-4 sm:inline-flex">
+          <Link href={links.track} onClick={(e) => trackClick(e)} className="btn btn-secondary hidden !px-4 sm:inline-flex">
             <ScanLine aria-hidden className="size-[1.125rem]" />
             Track Shipment
-          </a>
-          <a href={links.contact} className="btn btn-primary hidden md:inline-flex">
+          </Link>
+          <Link href={links.booking} className="btn btn-primary hidden md:inline-flex">
             Ship With Us
-          </a>
+          </Link>
           <button
             ref={menuButton}
             type="button"
